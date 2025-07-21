@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: university_timetable
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Titus7833@gmail
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - timetable_network
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:Titus7833%40gmail@db:5432/university_timetable
+    volumes:
+      - .:/app
+    networks:
+      - timetable_network
+
+volumes:
+  postgres_data:
+
+networks:
+  timetable_network:
+    driver: bridge
